@@ -1,30 +1,104 @@
-FableSpire
-Website : https://eda-solo-project-2025.fly.dev/#/registration
+# FableSpire
 
-This version uses React, Zustand, Express, Passport, and PostgreSQL. (A full list of dependencies can be found in package.json.)
+**Live Application**: https://fablespire.fly.dev/
 
-Prerequisites
-To get started, make sure you have the following software installed on your computer:
+FableSpire is a comprehensive D&D monster generator and management platform that empowers dungeon masters to create, customize, and organize unique creatures for their campaigns.
 
-Node.js
-PostgreSQL
-Nodemon
-Create Database and User Table
-Create a new database, then create a user table using the query found in database.sql.
+## 🎮 What FableSpire Does
 
-Note: pool.js is initially configured to connect to a database named eda_solo_project. If you choose your own name, you'll need to modify pool.js so it knows how to connect to your database.
-Initial Setup Instructions
-In this repo's root directory, run npm install.
-Create an .env file in the root directory, then paste this line into the file:
-  SERVER_SESSION_SECRET=superDuperSecret
-While you're in your new .env file, take the time to replace superDuperSecret with some a random string like 25POUbVtx6RKVNWszd9ERB9Bb6 to keep your application secure.
-Here's a site that can help you: Password Generator Plus.
-If you skip this step, create a secret with less than eight characters, or leave it as superDuperSecret, you'll get a big warning message each time you start your server.
-Run npm run server to start the server.
-Run npm run client to start the client.
-Navigate to localhost:5173.
-Verify that you are able to:
-Register as a new user.
-Log out.
-Log back in.
-Log out.
+### Core Features (Currently Live)
+- **AI-Powered Monster Generation**: Create unique D&D monsters using OpenAI's GPT technology
+- **Visual Monster Creation**: Generate custom monster artwork using DALL-E image generation
+- **Personal Monster Library**: Save, organize, and manage your created monsters
+- **Monster Stat Management**: View and edit complete monster stat blocks with D&D 5e formatting
+- **Secure User Authentication**: Protected user accounts with secure login/registration
+- **Admin Management Panel**: Administrative tools for user and monster oversight
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+### How to Use FableSpire
+1. **Register/Login**: Create your account at https://fablespire.fly.dev/
+2. **Generate Monsters**: Use the Monster Generator to create unique creatures
+3. **Customize**: Edit names, stats, and descriptions to fit your campaign
+4. **Browse Library**: Access your personal collection of saved monsters
+5. **Use in Game**: Reference your monsters during D&D sessions
+
+### Coming Soon 🚧
+Additional features currently in development:
+- Dungeon Generator
+- NPC Generator  
+- Treasure Generator
+- Encounter Builder
+- World Builder Tools
+- Adventure Generator
+
+## 🛠️ Technology Stack
+
+- **Frontend**: React, Bootstrap, Zustand (state management)
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL (hosted on Neon)
+- **Authentication**: Passport.js with sessions
+- **AI Integration**: OpenAI API (GPT-4 for text, DALL-E for images)
+- **Deployment**: Fly.io
+- **Image Storage**: Cloudinary
+
+## 🚀 Local Development Setup
+
+### Prerequisites
+- [Node.js](https://nodejs.org/en) (v18 or higher)
+- [PostgreSQL](https://www.postgresql.org)
+- OpenAI API Key
+- Cloudinary Account
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Alexander-Ruziska/Ziskas-Monster-Generator.git
+   cd Ziskas-Monster-Generator
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up your database using the schema in `database.sql`
+
+4. Create a `.env` file in the root directory:
+   ```env
+   SERVER_SESSION_SECRET=your_secure_secret_here
+   OPENAI_API_KEY=your_openai_api_key
+   DATABASE_URL=your_postgresql_connection_string
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+   CLOUDINARY_API_KEY=your_cloudinary_key
+   CLOUDINARY_API_SECRET=your_cloudinary_secret
+   ```
+
+5. Start the application:
+   ```bash
+   npm run server  # Start backend server
+   npm run client  # Start frontend (in separate terminal)
+   ```
+
+6. Navigate to `http://localhost:5173`
+
+## 📝 Features Overview
+
+### Monster Generation
+- Generate monsters by type, size, alignment, and challenge rating
+- AI creates complete stat blocks including abilities, actions, and lore
+- Custom artwork generated to match monster descriptions
+- Edit and customize any aspect of generated monsters
+
+### User Management
+- Secure registration and authentication
+- Personal monster collections
+- User profile management
+
+### Admin Features
+- View all users and their monster collections
+- Administrative controls for content management
+- User account management tools
+
+---
+
+Built with ❤️ for the D&D community
