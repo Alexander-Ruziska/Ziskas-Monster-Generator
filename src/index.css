@@ -18,7 +18,7 @@ body {
   font-family: sans-serif;
   background-color: #f0f0f0;
   color: rgba(0, 0, 0, 0.75);
-  background-image: url(../public/Images/2560x1600-terrain-wa.jpg);
+  background-image: url(/Images/2560x1600-terrain-wa.jpg);
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
@@ -122,7 +122,7 @@ footer {
 }
 @media (max-width: 768px) {
   body {
-    background-image: url(../public/Images/2560x1600-terrain-wa.jpg);
+    background-image: url(/Images/2560x1600-terrain-wa.jpg);
   background-repeat: no-repeat;
   background-attachment:fixed;
   background-size: 170vh;

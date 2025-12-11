@@ -1,0 +1,55 @@
+.dungeon-generator {
+  padding: 20px;
+}
+
+.room-card {
+  transition: all 0.2s ease;
+  border: 1px solid #ddd;
+}
+
+.room-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.room-card .card-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Theme-based styling */
+.theme-stone-dungeon .room-card {
+  border-color: #666;
+}
+
+.theme-stone-dungeon .card-header {
+  background-color: #444;
+  color: white;
+}
+
+.theme-ancient-temple .room-card {
+  border-color: #DAA520;
+}
+
+.theme-ancient-temple .card-header {
+  background-color: #DAA520;
+  color: white;
+}
+
+.theme-cavern .room-card {
+  border-color: #708090;
+}
+
+.theme-cavern .card-header {
+  background-color: #708090;
+  color: white;
+}
+
+.theme-crypt .room-card {
+  border-color: #2F2F2F;
+}
+
+.theme-crypt .card-header {
+  background-color: #2F2F2F;
+  color: white;
+}

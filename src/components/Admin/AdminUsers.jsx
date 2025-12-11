@@ -15,7 +15,18 @@ function AdminUsers() {
 
   return (
     <div className="users" style={{ marginTop: "100px"}}>
-      <h2 style={{fontSize: '36px' }}>Welcome Ziska!</h2>
+      <h2 style={{fontSize: '36px' }}>Welcome to FableSpire Admin!</h2>
+      
+      <div style={{ marginBottom: "20px" }}>
+        <button 
+          className="btn btn-success"
+          onClick={() => navigate('/admin/all-monsters')}
+          style={{ marginRight: "10px" }}
+        >
+          View All Monsters
+        </button>
+      </div>
+
       <table>
         <thead>
           <tr>

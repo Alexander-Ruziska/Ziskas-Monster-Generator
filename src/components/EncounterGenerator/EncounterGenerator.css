@@ -1,0 +1,35 @@
+.encounter-generator {
+  padding: 20px;
+}
+
+.generator-card, .preview-card {
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.generator-card .card-header,
+.preview-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.feature-list {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.feature-list ul {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.feature-list li {
+  margin-bottom: 10px;
+  color: #6c757d;
+}
+
+.feature-list strong {
+  color: #495057;
+}

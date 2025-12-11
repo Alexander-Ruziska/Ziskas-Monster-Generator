@@ -8,7 +8,7 @@ function Landing() {
 
   return (
     <form className="input-form" >
-      <h1 style={{ marginTop: '120px' }}>Welcome to the Monster Dashboard</h1>
+      <h1 style={{ marginTop: '120px' }}>Welcome to FableSpire</h1>
       <Card>
                   <Card.Img style={{ maxWidth: '300px', height: 'auto' }} variant="top" src="/Images/b1713295-2de8-450b-bfbf-12d53ec11d23.webp"/>
                   </Card>

@@ -9,20 +9,15 @@ const MonsterNavigation = () => {
   const user = useStore(state => state.user);
   const monsters = useStore(state => state.monsters) || [];
 
-  const userMonsters = [];
-  for (let i = 0; i < monsters.length; i++) {
-    if (Number(monsters[i].user_id) === user.id) {
-      userMonsters.push(monsters[i]);
-    }
-  }
-
+  // Filter monsters for the current user
+  const userMonsters = monsters.filter(monster => Number(monster.user_id) === user.id);
+  
   const currentId = +id;
-  let currentIndex = 0;
-  for (let i = 0; i < userMonsters.length; i++) {
-    if (userMonsters[i].id === currentId) {
-      currentIndex = i;
-      break;
-    }
+  const currentIndex = userMonsters.findIndex(monster => monster.id === currentId);
+  
+  // If monster not found or no monsters, don't render navigation
+  if (currentIndex === -1 || userMonsters.length <= 1) {
+    return null;
   }
 
   const handlePrev = () => {
@@ -37,10 +32,29 @@ const MonsterNavigation = () => {
     }
   };
 
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === userMonsters.length - 1;
+
   return (
     <>
-      <button className="arrow back" onClick={handlePrev} disabled={currentIndex === 0}>&#8592;</button>
-      <button className="arrow next" onClick={handleNext} disabled={currentIndex === userMonsters.length - 1}>&#8594;</button>
+      {!isFirst && (
+        <button 
+          className="arrow back" 
+          onClick={handlePrev}
+          title="Previous Monster"
+        >
+          &#8592;
+        </button>
+      )}
+      {!isLast && (
+        <button 
+          className="arrow next" 
+          onClick={handleNext}
+          title="Next Monster"
+        >
+          &#8594;
+        </button>
+      )}
     </>
   );
 };

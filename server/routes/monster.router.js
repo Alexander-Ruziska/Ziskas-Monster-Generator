@@ -417,6 +417,147 @@ router.post("/", async (req, res) => {
 
 //________________________________________________________________________________________________________________________
 
+// Step-by-step monster generation for real progress tracking
+router.post("/generate-stats", rejectUnauthenticated, async (req, res) => {
+  try {
+    const { name, challenge_rating, armor_class, environment, resistances, type } = req.body;
+    console.log("Generating stats for:", name);
+
+    // Generate monster stats with OpenAI (this is step 2 of 4)
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a dungeon master. Reply strictly in JSON format with all required fields." },
+        { role: "user", content: `Create a monster for Dungeons & Dragons 5e.
+          - Name: ${name || 'Random Monster'}
+          - Type: ${type || 'Beast'}  
+          - Challenge Rating: ${challenge_rating || '1'}
+          - Armor Class: ${armor_class || '12'}
+          - Environment: ${environment || 'Forest'}
+          - Resistances: ${resistances || 'None'}
+          Create complete stats, abilities, and description.` }
+      ],
+      response_format: {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "creature_schema",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "hit_points": { "type": "integer" },
+              "type": { "type": "string" },
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "strength": { "type": "integer" },
+              "dexterity": { "type": "integer" },
+              "constitution": { "type": "integer" },
+              "intelligence": { "type": "integer" },
+              "wisdom": { "type": "integer" },
+              "charisma": { "type": "integer" },
+              "speed": { "type": "string" },
+              "actions": { "type": "array", "items": { "type": "string" } },
+              "legendary_actions": { "type": "array", "items": { "type": "string" } },
+              "armor_class": { "type": "integer" },
+              "resistances": { "type": "string" },
+              "immunities": { "type": "string" },
+              "languages": { "type": "string" },
+              "senses": { "type": "string" },
+              "skills": { "type": "string" },
+              "saving_throws": { "type": "string" },
+              "challenge_rating": { "type": "string" },
+              "size": { "type": "string" },
+              "proficiency_bonus": { "type": "integer" },
+              "alignment": { "type": "string" },
+              "initiative": { "type": "integer" }
+            },
+            "required": ["hit_points", "type", "name", "description", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "speed", "actions", "legendary_actions", "armor_class", "resistances", "immunities", "languages", "senses", "skills", "saving_throws", "challenge_rating", "size", "proficiency_bonus", "alignment", "initiative"],
+            "additionalProperties": false
+          }
+        }
+      },
+      temperature: 0.78,
+      max_completion_tokens: 2048
+    });
+
+    const monsterData = JSON.parse(response.choices[0].message.content);
+    
+    // Save monster to database (without image first) - matching your exact schema
+    const insertQuery = `
+      INSERT INTO monster (
+        hit_points, user_id, type, name, description, strength, dexterity, constitution, intelligence,
+        wisdom, charisma, armor_class, initiative, speed, actions, legendary_actions, resistances, immunities,
+        languages, skills, senses, saving_throws, challenge_rating, size, alignment, proficiency_bonus
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
+      RETURNING *;
+    `;
+
+    const values = [
+      monsterData.hit_points, req.user.id, monsterData.type, monsterData.name, monsterData.description,
+      monsterData.strength, monsterData.dexterity, monsterData.constitution, 
+      monsterData.intelligence, monsterData.wisdom, monsterData.charisma,
+      monsterData.armor_class, monsterData.initiative, monsterData.speed, 
+      JSON.stringify(monsterData.actions), JSON.stringify(monsterData.legendary_actions),
+      monsterData.resistances, monsterData.immunities, monsterData.languages, 
+      monsterData.skills, monsterData.senses, monsterData.saving_throws, 
+      monsterData.challenge_rating, monsterData.size, monsterData.alignment, 
+      monsterData.proficiency_bonus
+    ];
+
+    const result = await pool.query(insertQuery, values);
+    const newMonster = result.rows[0];
+
+    res.json(newMonster);
+  } catch (error) {
+    console.error("Error generating monster stats:", error);
+    res.status(500).json({ error: "Failed to generate monster stats" });
+  }
+});
+
+router.post("/generate-image", rejectUnauthenticated, async (req, res) => {
+  try {
+    const { monsterId } = req.body;
+    
+    // Get monster data for image generation
+    const monsterResult = await pool.query("SELECT * FROM monster WHERE id = $1 AND user_id = $2", [monsterId, req.user.id]);
+    if (monsterResult.rows.length === 0) {
+      return res.status(404).json({ error: "Monster not found" });
+    }
+    
+    const monster = monsterResult.rows[0];
+
+    // Generate image with DALL-E (this is step 3 of 4)
+    const imageResponse = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: `A detailed fantasy monster called ${monster.name}. Description: ${monster.description}. It is a ${monster.size} ${monster.type} with a challenge rating of ${monster.challenge_rating}.`,
+      n: 1,
+      size: "1024x1024",
+    });
+
+    const imageUrl = imageResponse.data[0].url;
+    
+    // Convert to base64 and upload to Cloudinary (matching your original process)
+    const imageResponseData = await axios.get(imageUrl, { responseType: "arraybuffer" });
+    const base64Image = Buffer.from(imageResponseData.data).toString("base64");
+    const base64String = 'data:image/png;base64,' + base64Image;
+    
+    const cloudinaryResponse = await cloudinary.uploader.upload(base64String, {folder: 'Monsters'});
+
+    // Update monster with image URL
+    await pool.query(
+      "UPDATE monster SET image_url = $1 WHERE id = $2",
+      [cloudinaryResponse.secure_url, monsterId]
+    );
+
+    res.json({ imageUrl: cloudinaryResponse.secure_url });
+  } catch (error) {
+    console.error("Error generating monster image:", error);
+    res.status(500).json({ error: "Failed to generate monster image" });
+  }
+});
+
+//________________________________________________________________________________________________________________________
+
 
 router.get("/", rejectUnauthenticated, async (req, res) => {
   try {
@@ -427,21 +568,30 @@ router.get("/", rejectUnauthenticated, async (req, res) => {
   }
 });
 
-// Get all monsters
-router.get("/admin", async (req, res) => {
+// Get all monsters (admin only)
+router.get("/admin", rejectUnauthenticated, async (req, res) => {
   try {
+    // Check if user is admin
+    if (!req.user.admin) {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+    
     const result = await pool.query("SELECT * FROM monster ORDER BY id DESC");
     res.send(result.rows);
-  } catch {
+  } catch (error) {
+    console.error("Error fetching monsters:", error);
     res.status(500).json({ error: "Error fetching monsters" });
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", rejectUnauthenticated, async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM monster WHERE id = $1", [req.params.id]);
+    const result = await pool.query(
+      "SELECT * FROM monster WHERE id = $1 AND user_id = $2", 
+      [req.params.id, req.user.id]
+    );
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Monster not found" });
+      return res.status(404).json({ error: "Monster not found or access denied" });
     }
     res.send(result.rows[0]);
   } catch (error) {
@@ -450,12 +600,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/image/:id", async (req, res) => {
+router.get("/image/:id", rejectUnauthenticated, async (req, res) => {
   const monsterId = req.params.id;
   try {
     const result = await pool.query(
-      "SELECT image_url FROM monster WHERE id = $1 LIMIT 1",
-      [monsterId]
+      "SELECT image_url FROM monster WHERE id = $1 AND user_id = $2 LIMIT 1",
+      [monsterId, req.user.id]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Monster not found" });

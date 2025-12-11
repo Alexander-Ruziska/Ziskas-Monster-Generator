@@ -1,0 +1,65 @@
+.world-builder {
+  padding: 20px;
+}
+
+.generator-card, .preview-card {
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.generator-card .card-header,
+.preview-card .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.feature-list {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.feature-list ul {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.feature-list li {
+  margin-bottom: 10px;
+  color: #6c757d;
+}
+
+.feature-list strong {
+  color: #495057;
+}
+
+.historical-events, .cultural-elements, .adventure-hooks {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.historical-events li, .cultural-elements li, .adventure-hooks li {
+  margin-bottom: 8px;
+  color: #6c757d;
+}
+
+.lore-examples .card {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+}
+
+.lore-examples .card-title {
+  color: #495057;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.lore-examples .card-text {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.nav-tabs .nav-link.active {
+  font-weight: bold;
+}

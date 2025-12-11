@@ -14,6 +14,8 @@ function GenerateMonster() {
     creatureType: ''
   });
   const [loading, setLoading] = useState(false);
+  const [generationStep, setGenerationStep] = useState(0);
+  const [stepMessage, setStepMessage] = useState('');
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -36,20 +38,42 @@ function GenerateMonster() {
     };
 
     setLoading(true);
+    setGenerationStep(0);
+    
     try {
-      // Expecting the new monster object to be returned with an `id` property
-      const { data: newMonster } = await axios.post('/api/monster', monsterData);
+      // Step 1: Start generation
+      setGenerationStep(1);
+      setStepMessage("📝 Consulting ancient tomes and bestiaries...");
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Step 2: Generate monster stats with OpenAI
+      setGenerationStep(2);
+      setStepMessage("🧬 Weaving creature essence and magical properties...");
+      const { data: newMonster } = await axios.post('/api/monster/generate-stats', monsterData);
+      
+      // Step 3: Generate image
+      setGenerationStep(3);
+      setStepMessage("🎨 Manifesting physical form and appearance...");
+      await axios.post('/api/monster/generate-image', { monsterId: newMonster.id });
+      
+      // Step 4: Finalize
+      setGenerationStep(4);
+      setStepMessage("✨ Final arcane binding and creature awakening...");
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       // Navigate to the newly created monster's view using its id
       navigate(`/monster/${newMonster.id}`);
     } catch (error) {
       console.error("Error creating monster:", error);
     } finally {
       setLoading(false);
+      setGenerationStep(0);
+      setStepMessage('');
     }
   };
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage currentStep={generationStep} stepMessage={stepMessage} totalSteps={4} />;
   }
 
   return (

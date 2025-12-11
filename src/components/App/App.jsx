@@ -13,9 +13,16 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Library from '../Library/Library';
 import GenerateMonster from '../GenerateMonster/GenerateMonster';
+import DungeonGenerator from '../DungeonGenerator/DungeonGenerator';
+import EncounterGenerator from '../EncounterGenerator/EncounterGenerator';
+import TreasureGenerator from '../TreasureGenerator/TreasureGenerator';
+import NPCGenerator from '../NPCGenerator/NPCGenerator';
+import WorldBuilder from '../WorldBuilder/WorldBuilder';
+import AdventureGenerator from '../AdventureGenerator/AdventureGenerator';
 import Landing from '../Landing/Landing';
 import AdminUsers from '../Admin/AdminUsers';
 import AdminUserMonsters from '../Admin/AdminUserMonsters';
+import AdminAllMonsters from '../Admin/AdminAllMonsters';
 
 function App() {
   const user = useStore((state) => state.user);
@@ -90,6 +97,77 @@ function App() {
               )
             }
           />
+          {/* Commented out for deployment - work in progress
+          <Route 
+            exact path="/dungeon-generator"
+            element={
+              user.id ? (
+                <DungeonGenerator to="/dungeon-generator" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
+          */}
+          {/* Commented out unfinished sections - work in progress
+          <Route 
+            exact path="/encounter-generator"
+            element={
+              user.id ? (
+                <EncounterGenerator to="/encounter-generator" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
+          */}
+          {/* Commented out for deployment - work in progress
+          <Route 
+            exact path="/treasure-generator"
+            element={
+              user.id ? (
+                <TreasureGenerator to="/treasure-generator" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
+          */}
+          {/* Commented out unfinished sections - work in progress
+          <Route 
+            exact path="/npc-generator"
+            element={
+              user.id ? (
+                <NPCGenerator to="/npc-generator" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
+          */}
+          {/* Commented out unfinished sections - work in progress
+          <Route 
+            exact path="/world-builder"
+            element={
+              user.id ? (
+                <WorldBuilder to="/world-builder" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />
+          */}
+          {/* Commented out unfinished sections - work in progress */}
+          {/*<Route 
+            exact path="/adventure-generator"
+            element={
+              user.id ? (
+                <AdventureGenerator to="/adventure-generator" replace />
+              ) : (
+                <LoginPage />
+              )
+            }
+          />*/}
           <Route 
             exact path="/monster/:id"
             element={
@@ -119,14 +197,24 @@ function App() {
                 <LoginPage /> // Render RegisterPage for unauthenticated user.
               )
             }
-          />Z
+          />
+          <Route 
+            exact path="/admin/all-monsters"
+            element={
+              user.id && user.admin ? (
+                <AdminAllMonsters to="/admin/all-monsters" replace /> // Redirect authenticated user.
+              ) : ( 
+                <LoginPage /> // Render RegisterPage for unauthenticated user.
+              )
+            }
+          />
           <Route 
             exact path="/about"
             element={
               <>
                 <h2 style={{ marginTop: '120px', fontSize: '36px' }}>About Page</h2>
                 <p style={{ fontSize: '20px' }}>
-                <strong>Ziska's Monster Generator is an interactive tool for Dungeons & Dragons enthusiasts. It offers a blend of user customization and random generation to produce unique monsters complete with stats, abilities, and images. With an intuitive form for entering key monster parameters and a dynamic output that provides an immersive monster profile, this app enhances gameplay and storytelling for any D&D campaign.</strong>
+                <strong>FableSpire is an interactive tool for Dungeons & Dragons enthusiasts. It offers a blend of user customization and random generation to produce unique monsters, treasures, and dungeons complete with stats, abilities, and AI-generated images. With intuitive forms for entering key parameters and dynamic outputs that provide immersive profiles, this app enhances gameplay and storytelling for any D&D campaign.</strong>
                 </p>
               </>
             }

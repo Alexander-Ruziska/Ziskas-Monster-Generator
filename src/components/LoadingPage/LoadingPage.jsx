@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./LoadingPage.css"; 
-import { Container, Card, Button, InputGroup } from "react-bootstrap";
+import { Container, Card, Button, InputGroup, ProgressBar } from "react-bootstrap";
 
-const LoadingPage = () => {
+const LoadingPage = ({ currentStep = 0, stepMessage = '', totalSteps = 4 }) => {
     const facts = [
         "Tiamat, the five-headed dragon goddess, embodies chaos and destruction, commanding legions of dragons to wreak havoc across the realms.",
         "Rangers are expert trackers and survivalists, mastering the art of combat in natural settings and forming deep bonds with their animal companions.",
@@ -25,36 +25,106 @@ const LoadingPage = () => {
         "Drow, the dark elves of the Underdark, are skilled in both magic and combat, thriving in treacherous societies ruled by deities like Lolth.",
         "Goblins are crafty and often underestimated, using their agility and cunning to survive in harsh environments and launch surprise attacks."
       ];
-      
+
+  const monsterCreationSteps = [
+    "📝 Consulting ancient tomes and bestiaries...",
+    "🧬 Weaving creature essence and magical properties...", 
+    "⚔️ Calculating combat abilities and resistances...",
+    "🎨 Manifesting physical form and appearance...",
+    "🧙‍♂️ Imbuing with mystical powers and abilities...",
+    "🎭 Crafting personality and behavioral traits...",
+    "📊 Balancing challenge rating and statistics...",
+    "✨ Final arcane binding and creature awakening..."
+  ];
 
   const [fact, setFact] = useState("");
+  const [creationStep, setCreationStep] = useState(0);
+  const [stepText, setStepText] = useState(monsterCreationSteps[0]);
+
+  // Use real progress if provided, otherwise fall back to animation
+  const displayStep = currentStep > 0 ? currentStep - 1 : creationStep;
+  const displayStepText = stepMessage || stepText;
+  const progressPercentage = currentStep > 0 
+    ? (currentStep / totalSteps) * 100 
+    : ((creationStep + 1) / monsterCreationSteps.length) * 100;
 
   useEffect(() => {
     // Set an initial random fact.
     setFact(facts[Math.floor(Math.random() * facts.length)]);
 
-    // Update the fact every 3 seconds.
-    const intervalId = setInterval(() => {
+    // Update the fact every 10 seconds.
+    const factIntervalId = setInterval(() => {
       setFact(facts[Math.floor(Math.random() * facts.length)]);
     }, 10000);
 
-    // Clear the interval on component unmount.
-    return () => clearInterval(intervalId);
-  }, [facts]);
+    // Monster creation progress simulation (only if no real progress)
+    let stepIntervalId;
+    if (currentStep === 0) {
+      stepIntervalId = setInterval(() => {
+        setCreationStep(prev => {
+          const nextStep = (prev + 1) % monsterCreationSteps.length;
+          setStepText(monsterCreationSteps[nextStep]);
+          return nextStep;
+        });
+      }, 1500); // Change step every 1.5 seconds
+    }
+
+    // Clear the intervals on component unmount.
+    return () => {
+      clearInterval(factIntervalId);
+      if (stepIntervalId) clearInterval(stepIntervalId);
+    };
+  }, [facts, monsterCreationSteps, currentStep]);
 
   return (
     <div className="containerLoading">
       <h6 style={{ marginTop: '100px', textAlign: 'center', marginBottom: '20px', paddingRightRight: '0px' }}>Your Monster is being generated!</h6>
       <Card style={{ maxWidth: '500px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-  <Card.Img
-    variant="top"
-    src="/Images/da1c5863-7671-4878-856d-48e394fb3e46.webp"
-    style={{ width: '100%', maxWidth: '500px', height: 'auto' }}/>
-    
-</Card>
+        <Card.Img
+          variant="top"
+          src="/Images/da1c5863-7671-4878-856d-48e394fb3e46.webp"
+          style={{ width: '100%', maxWidth: '500px', height: 'auto' }}
+        />
+      </Card>
 
+      {/* Monster Creation Progress Bar */}
+      <div className="monster-creation-progress" style={{ 
+        maxWidth: '500px', 
+        margin: '20px auto', 
+        padding: '15px',
+        backgroundColor: '#f8f9fa',
+        borderRadius: '8px',
+        border: '2px solid #6f42c1'
+      }}>
+        <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+          <small style={{ color: '#6f42c1', fontWeight: 'bold' }}>
+            {displayStepText}
+          </small>
+        </div>
+        <ProgressBar 
+          now={progressPercentage}
+          variant="warning"
+          striped
+          animated={currentStep > 0} // Only animate during real progress
+          style={{ 
+            height: '8px',
+            backgroundColor: '#e9ecef'
+          }}
+        />
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          marginTop: '8px',
+          fontSize: '0.75rem',
+          color: '#6c757d'
+        }}>
+          <span>🔮 Arcane Binding</span>
+          <span>{Math.round(progressPercentage)}% Complete</span>
+          <span>⚡ Creature Awakening</span>
+        </div>
+      </div>
 
-<h5 className="col-lg-12">Did you know? {fact}</h5>
+      <h5 className="col-lg-12">Did you know? {fact}</h5>
     </div>
   );
 };

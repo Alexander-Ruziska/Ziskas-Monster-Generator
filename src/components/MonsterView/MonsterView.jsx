@@ -23,12 +23,14 @@ const MonsterView = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
 
   // Destructure functions from the global store
-  const { fetchMonsterDetail, updateMonster, deleteMonster } = useStore();
+  const { fetchMonsterDetail, updateMonster, deleteMonster, fetchMonsters } = useStore();
 
   // useEffect to fetch monster details once when the component mounts
   useEffect(() => {
     async function fetchMonster() {
       try {
+        // Ensure we have the monsters list for navigation
+        await fetchMonsters();
         // Call the store function to get monster data using the id from the URL
         const data = await fetchMonsterDetail(id);
         setMonster(data); // Set the monster state with the fetched data
@@ -38,7 +40,7 @@ const MonsterView = () => {
       }
     }
     fetchMonster();
-  }, [id, fetchMonsterDetail]); // Re-run if the id or fetchMonsterDetail function changes
+  }, [id, fetchMonsterDetail, fetchMonsters]); // Re-run if the id or fetch functions change
 
   // useEffect to update isMobile on window resize
   useEffect(() => {

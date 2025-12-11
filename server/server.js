@@ -12,9 +12,11 @@ const PORT = process.env.PORT || 5001;
 const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
 
-// Require router files:
+// Route includes
 const userRouter = require('./routes/user.router');
-const monsterRouter = require("./routes/monster.router");
+const monsterRouter = require('./routes/monster.router');
+const dungeonRouter = require('./routes/dungeon.router');
+const treasureRouter = require('./routes/treasure.router');
 
 // Apply middleware:
 app.use(bodyParser.json({ limit: '50mb' })); // Increased payload limit
@@ -29,9 +31,11 @@ app.use(passport.session());
 const cors = require("cors");
 app.use(cors());
 
-// Apply router files:
+// Routes
 app.use('/api/user', userRouter);
 app.use("/api/monster", monsterRouter);
+app.use('/api/dungeon', dungeonRouter);
+app.use('/api/treasure', treasureRouter);
 
 // Start the server:
 app.listen(PORT, () => {
