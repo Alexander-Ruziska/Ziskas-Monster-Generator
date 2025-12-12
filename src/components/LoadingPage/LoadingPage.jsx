@@ -27,14 +27,14 @@ const LoadingPage = ({ currentStep = 0, stepMessage = '', totalSteps = 4 }) => {
       ];
 
   const monsterCreationSteps = [
-    "📝 Consulting ancient tomes and bestiaries...",
-    "🧬 Weaving creature essence and magical properties...", 
-    "⚔️ Calculating combat abilities and resistances...",
-    "🎨 Manifesting physical form and appearance...",
-    "🧙‍♂️ Imbuing with mystical powers and abilities...",
-    "🎭 Crafting personality and behavioral traits...",
-    "📊 Balancing challenge rating and statistics...",
-    "✨ Final arcane binding and creature awakening..."
+    "Consulting ancient tomes and bestiaries...",
+    "Weaving creature essence and magical properties...", 
+    "Calculating combat abilities and resistances...",
+    "Manifesting physical form and appearance...",
+    "Imbuing with mystical powers and abilities...",
+    "Crafting personality and behavioral traits...",
+    "Balancing challenge rating and statistics...",
+    "Final arcane binding and creature awakening..."
   ];
 
   const [fact, setFact] = useState("");
@@ -87,44 +87,80 @@ const LoadingPage = ({ currentStep = 0, stepMessage = '', totalSteps = 4 }) => {
         />
       </Card>
 
-      {/* Monster Creation Progress Bar */}
-      <div className="monster-creation-progress" style={{ 
+      {/* Combined Loading Progress and Facts */}
+      <div style={{ 
         maxWidth: '500px', 
         margin: '20px auto', 
-        padding: '15px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        border: '2px solid #6f42c1'
+        padding: '20px',
+        backgroundColor: 'rgba(101, 67, 33, 0.6)',
+        borderRadius: '12px',
+        backdropFilter: 'blur(5px)',
+        textAlign: 'center'
       }}>
-        <div style={{ marginBottom: '10px', textAlign: 'center' }}>
-          <small style={{ color: '#6f42c1', fontWeight: 'bold' }}>
-            {displayStepText}
-          </small>
+        {/* Loading Progress Section */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '8px' }}>
+            <small style={{ color: '#fff', fontWeight: 'normal' }}>
+              {displayStepText}
+            </small>
+          </div>
+          <ProgressBar 
+            now={progressPercentage}
+            style={{ 
+              height: '6px',
+              backgroundColor: '#495057',
+              marginBottom: '8px'
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#6c757d',
+              borderRadius: '3px'
+            }}></div>
+          </ProgressBar>
+          <div style={{ 
+            fontSize: '0.7rem',
+            color: '#adb5bd'
+          }}>
+            {Math.round(progressPercentage)}% Complete
+          </div>
         </div>
-        <ProgressBar 
-          now={progressPercentage}
-          variant="warning"
-          striped
-          animated={currentStep > 0} // Only animate during real progress
-          style={{ 
-            height: '8px',
-            backgroundColor: '#e9ecef'
-          }}
-        />
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          marginTop: '8px',
-          fontSize: '0.75rem',
-          color: '#6c757d'
-        }}>
-          <span>🔮 Arcane Binding</span>
-          <span>{Math.round(progressPercentage)}% Complete</span>
-          <span>⚡ Creature Awakening</span>
+        
+        {/* Divider */}
+        <div style={{
+          height: '1px',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          margin: '15px 0',
+          width: '80%',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}></div>
+        
+        {/* Did You Know Section */}
+        <div>
+          <h5 style={{ 
+            color: '#f0e6d2', 
+            fontSize: '16px', 
+            fontWeight: 'bold',
+            marginBottom: '10px',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+          }}>
+            Did you know?
+          </h5>
+          <p style={{ 
+            color: '#e6dcc6', 
+            fontSize: '14px', 
+            lineHeight: '1.4',
+            margin: '0',
+            fontStyle: 'italic'
+          }}>
+            {fact}
+          </p>
         </div>
       </div>
 
-      <h5 className="col-lg-12">Did you know? {fact}</h5>
+      
     </div>
   );
 };
