@@ -4,7 +4,7 @@
 
 FableSpire is a comprehensive D&D monster generator and management platform that empowers dungeon masters to create, customize, and organize unique creatures for their campaigns.
 
-## 🎮 What FableSpire Does
+## What FableSpire Does
 
 ### Core Features (Currently Live)
 - **AI-Powered Monster Generation**: Create unique D&D monsters using OpenAI's GPT technology
@@ -22,7 +22,7 @@ FableSpire is a comprehensive D&D monster generator and management platform that
 4. **Browse Library**: Access your personal collection of saved monsters
 5. **Use in Game**: Reference your monsters during D&D sessions
 
-### Coming Soon 🚧
+### Coming Soon
 Additional features currently in development:
 - Dungeon Generator
 - NPC Generator  
@@ -31,7 +31,7 @@ Additional features currently in development:
 - World Builder Tools
 - Adventure Generator
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: React, Bootstrap, Zustand (state management)
 - **Backend**: Node.js, Express.js
@@ -41,7 +41,7 @@ Additional features currently in development:
 - **Deployment**: Fly.io
 - **Image Storage**: Cloudinary
 
-## 🚀 Local Development Setup
+## Local Development Setup
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/en) (v18 or higher)
@@ -81,7 +81,7 @@ Additional features currently in development:
 
 6. Navigate to `http://localhost:5173`
 
-## 📝 Features Overview
+## Features Overview
 
 ### Monster Generation
 - Generate monsters by type, size, alignment, and challenge rating
@@ -101,4 +101,4 @@ Additional features currently in development:
 
 ---
 
-Built with ❤️ for the D&D community
+Built for the D&D community
